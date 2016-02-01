@@ -8,10 +8,12 @@ Yet another todo list manager app.
 ## To Do
 * Re-implement using PCL?
 * ~~Add due date (DatePicker).~~
-* Group tasks (Done, Not done - sorted in descending order)
+* ~~Group tasks (Done, Not done - sorted in descending order)~~
 * UI issues
 	* Try to do the floating action bar for Android?
-* Remove the damn title icon.
+* ~~Remove the damn title icon.~~
+* Resize description entry in task details page
+* 
 
 ## Notes
 * Binding non-string object to a label:
@@ -23,3 +25,5 @@ dateLabel.SetBinding(Label.TextProperty, new Binding(path: "Date", stringFormat:
 	* Solution: Constructor should initialize the date member.
 * For ListView to dynamically resize based on content, set `HasUnevenRows`.
 * `ActionBar.SetIcon(null)` (Android) to hide the icon on the actionbar but still show title and menu.
+* Left alone, ListView will scale to its maximum height, so stacking two of them on top of the other is a pain. 
+	* Hack: `todoList.HeightRequest = 1.1*(todoList.RowHeight * tasks.Count);`

@@ -7,7 +7,7 @@ namespace CloneDo
 {
 	public class TodoList: ContentPage
 	{
-		ListView todoList;
+		ListView todoList, doneList;
 
 		public TodoList ()
 		{
@@ -15,17 +15,30 @@ namespace CloneDo
 			// Views
 			todoList = new ListView {
 				HasUnevenRows = true,
-				IsGroupingEnabled = true,
-				GroupDisplayBinding = new Binding("Key"),
+				RowHeight = 50,
+				VerticalOptions = LayoutOptions.Fill,
 			};
 			todoList.ItemTemplate = new DataTemplate (typeof(TaskItemCell));
 
+			doneList = new ListView {
+				HasUnevenRows = true,
+				RowHeight = 50,
+				VerticalOptions = LayoutOptions.Fill
+			};
+			doneList.ItemTemplate = new DataTemplate (typeof(TaskDoneCell));
+
 			Button newBtn = new Button {
-				Text = "New Task",
+				Text = "New",
 			};
 				
 			// Events
 			todoList.ItemSelected += (sender, e) => {
+				var task = (TaskItem)e.SelectedItem;
+				var taskDetails = new TaskDetails();
+				taskDetails.BindingContext = task;
+				Navigation.PushAsync(taskDetails);
+			};
+			doneList.ItemSelected += (sender, e) => {
 				var task = (TaskItem)e.SelectedItem;
 				var taskDetails = new TaskDetails();
 				taskDetails.BindingContext = task;
@@ -37,29 +50,36 @@ namespace CloneDo
 				taskDetails.BindingContext = task;
 				Navigation.PushAsync(taskDetails);
 			};
-
+	
 			// Layout
 			StackLayout stackLayout = new StackLayout {
 				Children = {
 					newBtn,
 					todoList,
-				}
+					doneList
+				},
+				Padding = new Thickness(10, 0)
+			};
+
+
+			ScrollView sv = new ScrollView {
+				Content = stackLayout
 			};
 
 			Title = "CloneDo";
-			Content = stackLayout;
+			Content = sv;
 			Padding = new Thickness (0, Device.OnPlatform (20, 0, 0), 0, 0);
 		}
 	
 		// Override to update the list
 		protected override void OnAppearing() {
 			base.OnAppearing ();
-			List<TaskGroup> groups = new List<TaskGroup> {
-				new TaskGroup ("To-Do", App.Database.GetTasks ()),
-				new TaskGroup ("Done", App.Database.GetTasks (true))
-			};
-			
-			todoList.ItemsSource = groups;
+			List<TaskItem> tasks = (List<TaskItem>) App.Database.GetTasks ();
+			List<TaskItem> done = (List<TaskItem>) App.Database.GetTasks (true);
+			todoList.ItemsSource = tasks;
+			todoList.HeightRequest = 1.1*(todoList.RowHeight * tasks.Count);
+			doneList.ItemsSource = done;
+			doneList.HeightRequest = 1.1*(doneList.RowHeight * done.Count);
 		}
 	
 	}
@@ -74,4 +94,3 @@ namespace CloneDo
 		}
 	};
 }
-

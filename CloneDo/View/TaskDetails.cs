@@ -70,6 +70,7 @@ namespace CloneDo
 			taskDoneSwitch.SetBinding (Xamarin.Forms.Switch.IsToggledProperty, "Done");
 			taskDatePicker.SetBinding (DatePicker.DateProperty, "Date");
 
+
 			// Events
 			saveBtn.Clicked += (sender, e) => {
 				var task = (TaskItem)BindingContext;

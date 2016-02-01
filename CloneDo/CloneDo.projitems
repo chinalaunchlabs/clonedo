@@ -16,10 +16,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)View\TaskItemCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\TodoList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\TaskDetails.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskDoneCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)SQL\" />
     <Folder Include="$(MSBuildThisFileDirectory)Model\" />
     <Folder Include="$(MSBuildThisFileDirectory)View\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Resources\" />
   </ItemGroup>
 </Project>
