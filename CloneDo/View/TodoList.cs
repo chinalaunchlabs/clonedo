@@ -10,15 +10,10 @@ namespace CloneDo
 
 		public TodoList ()
 		{
-//			TaskItem[] tasks = new TaskItem[] {
-//				new TaskItem { Task = "Finish this", Description = "Now na", Done = false },
-//				new TaskItem { Task = "Take out trash", Description = "...", Done = false },
-//				new TaskItem { Task = "Read book", Description = "Xamarin Cross-Platform", Done = true },
-//			};
-//
+			
 			// Views
 			todoList = new ListView {
-				RowHeight = 60,
+				HasUnevenRows = true
 			};
 			todoList.ItemTemplate = new DataTemplate (typeof(TaskItemCell));
 

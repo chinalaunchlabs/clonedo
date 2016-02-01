@@ -10,10 +10,11 @@ namespace CloneDo
 	{
 		public TaskDetails ()
 		{
-			Label taskNameLabel, taskDescLabel, taskDoneLabel;
+			Label taskNameLabel, taskDescLabel, taskDoneLabel, taskDateLabel;
 			Entry taskNameEntry;
 			Editor taskDescEntry;
 			Switch taskDoneSwitch;
+			DatePicker taskDatePicker;
 			Button saveBtn, deleteBtn;
 			StackLayout stackLayout;
 
@@ -33,6 +34,11 @@ namespace CloneDo
 				FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
 				FontAttributes = FontAttributes.Bold,
 			};
+			taskDateLabel = new Label {
+				Text = "Due Date",
+				FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+				FontAttributes = FontAttributes.Bold,
+			};
 
 			taskNameEntry = new Entry {
 				Placeholder = "Be awesome",
@@ -43,6 +49,11 @@ namespace CloneDo
 				
 			};
 			taskDoneSwitch = new Switch ();
+			taskDatePicker = new DatePicker {
+				Format = "D",
+				VerticalOptions = LayoutOptions.CenterAndExpand,
+				Date = DateTime.Today
+			};
 
 			saveBtn = new Button {
 				Text = "Save"
@@ -57,6 +68,7 @@ namespace CloneDo
 			taskNameEntry.SetBinding(Entry.TextProperty, "Task");
 			taskDescEntry.SetBinding (Editor.TextProperty, "Description");
 			taskDoneSwitch.SetBinding (Xamarin.Forms.Switch.IsToggledProperty, "Done");
+			taskDatePicker.SetBinding (DatePicker.DateProperty, "Date");
 
 			// Events
 			saveBtn.Clicked += (sender, e) => {
@@ -84,6 +96,8 @@ namespace CloneDo
 					taskDescEntry,
 					taskDoneLabel,
 					taskDoneSwitch,
+					taskDateLabel,
+					taskDatePicker,
 					saveBtn,
 					deleteBtn
 				},

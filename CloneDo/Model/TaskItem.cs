@@ -7,6 +7,7 @@ namespace CloneDo
 	{
 		public TaskItem ()
 		{
+			Date = DateTime.Today;
 		}
 
 		[PrimaryKey, AutoIncrement]
@@ -17,6 +18,8 @@ namespace CloneDo
 		public string Description { get; set; }
 
 		public bool Done { get; set; }
+
+		public DateTime Date { get; set; }
 	}
 }
 

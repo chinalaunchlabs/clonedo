@@ -8,7 +8,7 @@ namespace CloneDo
 	{
 		public TaskItemCell ()
 		{
-			Label 		taskDescription, taskName;
+			Label 		taskDescription, taskName, taskDate;
 			Image 		taskDone;
 			StackLayout nameAndDescWrapper, wholeLayout;
 
@@ -26,15 +26,22 @@ namespace CloneDo
 				Aspect = Aspect.AspectFit,
 				HorizontalOptions = LayoutOptions.End
 			};
+			taskDate = new Label {
+				Text = "Date here",
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label))
+			};
 
 			taskName.SetBinding (Label.TextProperty, "Task");
 			taskDescription.SetBinding (Label.TextProperty, "Description");
 			taskDone.SetBinding (Image.IsVisibleProperty, "Done");
+			taskDate.SetBinding (Label.TextProperty, new Binding("Date", stringFormat: "{0:dd/MM/yyyy}"));
 
 			nameAndDescWrapper = new StackLayout {
 				Children = {
 					taskName,
-					taskDescription
+					taskDate,
+					taskDescription,
 				},
 				HorizontalOptions = LayoutOptions.StartAndExpand
 			};
