@@ -7,7 +7,7 @@ namespace CloneDo
 	{
 		public TaskItem ()
 		{
-			Date = DateTime.Today;
+			Date = DateTime.Today;	// default date in database
 		}
 
 		[PrimaryKey, AutoIncrement]

@@ -37,10 +37,16 @@ namespace CloneDo
 			database.CreateTable<TaskItem> ();
 		}
 
+//		public IEnumerable<TaskItem> GetTasks() {
+//			lock (locker) {
+//				return (from i in database.Table<TaskItem> ()
+//				        select i).ToList ();
+//			}
+//		}
+
 		public IEnumerable<TaskItem> GetTasks() {
 			lock (locker) {
-				return (from i in database.Table<TaskItem> ()
-				        select i).ToList ();
+				return database.Query<TaskItem> ("SELECT * FROM TaskItem ORDER BY Date ASC");
 			}
 		}
 

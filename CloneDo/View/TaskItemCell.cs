@@ -32,11 +32,14 @@ namespace CloneDo
 				FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label))
 			};
 
+			// Binding
 			taskName.SetBinding (Label.TextProperty, "Task");
 			taskDescription.SetBinding (Label.TextProperty, "Description");
 			taskDone.SetBinding (Image.IsVisibleProperty, "Done");
 			taskDate.SetBinding (Label.TextProperty, new Binding("Date", stringFormat: "{0:dd/MM/yyyy}"));
 
+
+			// Layout
 			nameAndDescWrapper = new StackLayout {
 				Children = {
 					taskName,
