@@ -44,9 +44,9 @@ namespace CloneDo
 //			}
 //		}
 
-		public IEnumerable<TaskItem> GetTasks() {
+		public IEnumerable<TaskItem> GetTasks(bool taskDone = false) {
 			lock (locker) {
-				return database.Query<TaskItem> ("SELECT * FROM TaskItem ORDER BY Date ASC");
+				return database.Table<TaskItem>().Where(x => x.Done == taskDone).OrderBy(x => x.Date).ToList();
 			}
 		}
 

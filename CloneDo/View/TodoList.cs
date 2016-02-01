@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace CloneDo
 {
 	public class TodoList: ContentPage
 	{
-		ListView todoList; 
+		ListView todoList;
 
 		public TodoList ()
 		{
 			
 			// Views
 			todoList = new ListView {
-				HasUnevenRows = true
+				HasUnevenRows = true,
+				IsGroupingEnabled = true,
+				GroupDisplayBinding = new Binding("Key"),
 			};
 			todoList.ItemTemplate = new DataTemplate (typeof(TaskItemCell));
 
@@ -39,7 +42,7 @@ namespace CloneDo
 			StackLayout stackLayout = new StackLayout {
 				Children = {
 					newBtn,
-					todoList
+					todoList,
 				}
 			};
 
@@ -51,9 +54,24 @@ namespace CloneDo
 		// Override to update the list
 		protected override void OnAppearing() {
 			base.OnAppearing ();
-			todoList.ItemsSource = App.Database.GetTasks ();
+			List<TaskGroup> groups = new List<TaskGroup> {
+				new TaskGroup ("To-Do", App.Database.GetTasks ()),
+				new TaskGroup ("Done", App.Database.GetTasks (true))
+			};
+			
+			todoList.ItemsSource = groups;
 		}
 	
 	}
+
+	class TaskGroup : List<TaskItem> {
+		public string Key { get; private set; }
+		public TaskGroup (string key, IEnumerable<TaskItem> tasks) {
+			Key = key;
+			foreach (var task in tasks) {
+				this.Add (task);
+			}
+		}
+	};
 }
 
