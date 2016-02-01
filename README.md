@@ -1,7 +1,7 @@
 # Clone-Do
 Yet another todo list manager app.
 
-## Notes
+## What this is
 * Shameless clone of the Xamarin Todo project ([link](https://github.com/xamarin/xamarin-forms-samples/tree/master/Todo)).
 * Uses shared project to implement SQLite access (see [this](http://github.com/chinalaunchlabs/reference-sqlite) for more information).
 
@@ -22,3 +22,4 @@ dateLabel.SetBinding(Label.TextProperty, new Binding(path: "Date", stringFormat:
 * When creating a task item (with a member of type DateTime), the default value of this member in the database is DatePicker.MinimumDate, which is why `datePicker.Date = DateTime.Today` and other variations thereof seemingly do not work.
 	* Solution: Constructor should initialize the date member.
 * For ListView to dynamically resize based on content, set `HasUnevenRows`.
+* `ActionBar.SetIcon(null)` (Android) to hide the icon on the actionbar but still show title and menu.
