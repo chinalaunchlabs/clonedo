@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace CloneDo
 {
+	public delegate void OnTaskItemDelete();
+
 	public class TodoList: ContentPage
 	{
-		ListView todoList, doneList;
+		public ListView todoList, doneList;
 
 		public TodoList ()
 		{
@@ -74,6 +77,10 @@ namespace CloneDo
 		// Override to update the list
 		protected override void OnAppearing() {
 			base.OnAppearing ();
+			Refresh ();
+		}
+
+		public void Refresh() {
 			List<TaskItem> tasks = (List<TaskItem>) App.Database.GetTasks ();
 			List<TaskItem> done = (List<TaskItem>) App.Database.GetTasks (true);
 			todoList.ItemsSource = tasks;
@@ -83,14 +90,4 @@ namespace CloneDo
 		}
 	
 	}
-
-	class TaskGroup : List<TaskItem> {
-		public string Key { get; private set; }
-		public TaskGroup (string key, IEnumerable<TaskItem> tasks) {
-			Key = key;
-			foreach (var task in tasks) {
-				this.Add (task);
-			}
-		}
-	};
 }

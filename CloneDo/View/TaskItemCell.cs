@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace CloneDo
@@ -12,6 +14,7 @@ namespace CloneDo
 			Image 		taskDone;
 			StackLayout nameAndDescWrapper, wholeLayout;
 
+			// Views
 			taskName = new Label {
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
@@ -33,12 +36,28 @@ namespace CloneDo
 				FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label))
 			};
 
-			// Binding
+			// Data Binding
 			taskName.SetBinding (Label.TextProperty, "Task");
 			taskDescription.SetBinding (Label.TextProperty, "Description");
 			taskDone.SetBinding (Image.IsVisibleProperty, "Done");
 			taskDate.SetBinding (Label.TextProperty, new Binding ("Date", converter: new DateConverter ()));
 			taskName.SetBinding (Label.TextColorProperty, new Binding ("Date", converter: new OverdueConverter ()));
+
+			// MenuItems
+			var deleteAction = new MenuItem { Text = "Delete", IsDestructive = true };
+			deleteAction.SetBinding (MenuItem.CommandParameterProperty, new Binding ("."));
+			deleteAction.Clicked += (sender, e) => {
+				var mi = ((MenuItem)sender);
+				TaskItem t = (TaskItem) mi.CommandParameter;
+				App.Database.DeleteTask(t.ID);
+
+				// this > listview > stacklayout > scrollview > contentpage
+				// wow this is unacceptable
+				// TODO: Turn into delegate
+				((TodoList)((ScrollView)((StackLayout)((ListView)this.Parent).Parent).Parent).Parent).Refresh();
+			};
+
+			ContextActions.Add (deleteAction);
 
 			// Layout
 			nameAndDescWrapper = new StackLayout {
@@ -81,7 +100,6 @@ namespace CloneDo
 			}
 		}
 	}
-
 
 
 	class OverdueConverter : IValueConverter {

@@ -40,6 +40,22 @@ namespace CloneDo
 			taskDone.SetBinding (Image.IsVisibleProperty, "Done");
 			taskDate.SetBinding (Label.TextProperty, new Binding ("Date", converter: new DateConverter()));
 
+			// MenuItems
+			var deleteAction = new MenuItem { Text = "Delete", IsDestructive = true };
+			deleteAction.SetBinding (MenuItem.CommandParameterProperty, new Binding ("."));
+			deleteAction.Clicked += (sender, e) => {
+				var mi = ((MenuItem)sender);
+				TaskItem t = (TaskItem) mi.CommandParameter;
+				App.Database.DeleteTask(t.ID);
+
+				// this > listview > stacklayout > scrollview > contentpage
+				// wow this is unacceptable
+				// TODO: Turn into delegate
+				((TodoList)((ScrollView)((StackLayout)((ListView)this.Parent).Parent).Parent).Parent).Refresh();
+			};
+
+			ContextActions.Add (deleteAction);
+
 			// Layout
 			nameAndDescWrapper = new StackLayout {
 				Children = {

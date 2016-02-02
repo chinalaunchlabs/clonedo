@@ -16,7 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)View\TaskItemCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\TodoList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\TaskDetails.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TaskDoneCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View\TaskDoneCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)SQL\" />
