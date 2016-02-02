@@ -14,7 +14,7 @@ Yet another todo list manager app.
 * ~~Remove the damn title icon.~~
 * Resize description entry in task details page
 * ~~Long press for delete action~~
-* Refactor delete action-refresh view methods
+* ~~Refactor delete action-refresh view methods~~
 
 ## Notes
 * Binding non-string object to a label:

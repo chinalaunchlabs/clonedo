@@ -8,12 +8,19 @@ namespace CloneDo
 	// How task is rendered in a ListView
 	public class TaskItemCell: ViewCell
 	{
+		public delegate void TaskItemEvent (TaskItem t);
+		public static event TaskItemEvent TaskDeleted;
+
+		protected Label 		taskDescription, taskName, taskDate;
+		protected Image 		taskDone;
+		protected StackLayout	nameAndDescWrapper, wholeLayout;
+
 		public TaskItemCell ()
 		{
-			Label 		taskDescription, taskName, taskDate;
-			Image 		taskDone;
-			StackLayout nameAndDescWrapper, wholeLayout;
+			Setup ();
+		}
 
+		protected void Setup() {
 			// Views
 			taskName = new Label {
 				HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -26,12 +33,10 @@ namespace CloneDo
 				FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label))
 			};
 			taskDone = new Image {
-				Source = "https://cdn4.iconfinder.com/data/icons/tupix-1/30/checkmark-128.png",
 				Aspect = Aspect.AspectFit,
 				HorizontalOptions = LayoutOptions.End
 			};
 			taskDate = new Label {
-				Text = "Date here",
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label))
 			};
@@ -47,23 +52,20 @@ namespace CloneDo
 			var deleteAction = new MenuItem { Text = "Delete", IsDestructive = true };
 			deleteAction.SetBinding (MenuItem.CommandParameterProperty, new Binding ("."));
 			deleteAction.Clicked += (sender, e) => {
-				var mi = ((MenuItem)sender);
-				TaskItem t = (TaskItem) mi.CommandParameter;
-				App.Database.DeleteTask(t.ID);
-
-				// this > listview > stacklayout > scrollview > contentpage
-				// wow this is unacceptable
-				// TODO: Turn into delegate
-				((TodoList)((ScrollView)((StackLayout)((ListView)this.Parent).Parent).Parent).Parent).Refresh();
+				TaskItem t = (TaskItem)((MenuItem)sender).CommandParameter;
+				TaskItemEvent handler = TaskDeleted;
+				if (handler != null)
+					handler(t);
 			};
 
+			ContextActions.Remove (deleteAction);
 			ContextActions.Add (deleteAction);
 
 			// Layout
 			nameAndDescWrapper = new StackLayout {
 				Children = {
 					taskName,
-//					taskDescription,
+					//					taskDescription,
 					taskDate,
 				},
 				HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -80,10 +82,9 @@ namespace CloneDo
 			};
 
 			View = wholeLayout;
-
 		}
 
-		class DateConverter : IValueConverter {
+		private class DateConverter : IValueConverter {
 			public object Convert (object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
 				DateTime date = (DateTime) value;
 				int overdue = date.CompareTo (DateTime.Today);
@@ -99,20 +100,20 @@ namespace CloneDo
 				throw new NotImplementedException ();
 			}
 		}
-	}
 
 
-	class OverdueConverter : IValueConverter {
-		public object Convert (object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-			DateTime date = (DateTime) value;
+		private class OverdueConverter : IValueConverter {
+			public object Convert (object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+				DateTime date = (DateTime) value;
 
-			bool overDue = date.CompareTo (DateTime.Today) < 0;
-			return overDue ? Color.Red : Color.Black;
+				bool overDue = date.CompareTo (DateTime.Today) < 0;
+				return overDue ? Color.Red : Color.Black;
 
-		}
+			}
 
-		public object ConvertBack (object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-			throw new NotImplementedException ();
+			public object ConvertBack (object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+				throw new NotImplementedException ();
+			}
 		}
 	}
 }

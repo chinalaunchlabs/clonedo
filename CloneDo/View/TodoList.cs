@@ -6,8 +6,6 @@ using Xamarin.Forms;
 
 namespace CloneDo
 {
-	public delegate void OnTaskItemDelete();
-
 	public class TodoList: ContentPage
 	{
 		public ListView todoList, doneList;
@@ -53,6 +51,7 @@ namespace CloneDo
 				taskDetails.BindingContext = task;
 				Navigation.PushAsync(taskDetails);
 			};
+			TaskItemCell.TaskDeleted += OnTaskItemDelete;
 	
 			// Layout
 			StackLayout stackLayout = new StackLayout {
@@ -77,6 +76,11 @@ namespace CloneDo
 		// Override to update the list
 		protected override void OnAppearing() {
 			base.OnAppearing ();
+			Refresh ();
+		}
+
+		public void OnTaskItemDelete(TaskItem t) {
+			App.Database.DeleteTask(t.ID);
 			Refresh ();
 		}
 
